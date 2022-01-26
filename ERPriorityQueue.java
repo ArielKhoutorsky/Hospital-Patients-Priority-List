@@ -2,20 +2,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ERPriorityQueue{
-
-	public ArrayList<Patient>  patients;
-	public HashMap<String,Integer>  nameToIndex;
+	public ArrayList<Patient>  patients; //list of patients
+	public HashMap<String,Integer>  nameToIndex; //patient name/priority position key value pairs
 
 	public ERPriorityQueue(){
-
-		//  use a dummy node so that indexing starts at 1, not 0
-
 		patients = new ArrayList<Patient>();
-		patients.add( new Patient("dummy", 0.0) );
-
+		patients.add( new Patient("dummy", 0.0) ); //using a dummy node so that indexing starts at 1, not 0
 		nameToIndex  = new HashMap<String,Integer>();
 	}
 
+	//heap behavior as priority queue
 	private int parent(int i){
 		return i/2;
 	}
@@ -28,11 +24,7 @@ public class ERPriorityQueue{
 	    return 2*i+1;
 	}
 
-    /*
-    TODO: OPTIONAL
-    TODO: Additional helper methods such as isLeaf(int i), isEmpty(), swap(int i, int j) could be useful for this assignment
-     */
-
+	//determining if patient is a leaf of the heap
 	public boolean isLeaf(int i){
 		if (leftChild(i) <= patients.size() - 1){
 			return false;
@@ -42,6 +34,7 @@ public class ERPriorityQueue{
 		}
 	}
 
+	//verifying heap validity
 	public boolean legalHeap() {
 		for (int i = 1; i <= (patients.size() - 1)/2; i++) {
 			if (patients.get(i).priority > patients.get(i * 2).priority) return false;
@@ -50,6 +43,7 @@ public class ERPriorityQueue{
 		return true;
 	}
 
+	//swapping positions of two patients
 	public void swap(int i, int j){
 		Patient temp1 = patients.get(i);
 		Patient temp2 = patients.get(j);
@@ -66,6 +60,7 @@ public class ERPriorityQueue{
 		}
 	}
 
+	//helper method
 	public Integer upHeapWithIndex(int i){
 		while ( i > 1 && patients.get(i).getPriority() < patients.get(parent(i)).getPriority()){
 			swap(i,parent(i));
@@ -92,6 +87,7 @@ public class ERPriorityQueue{
 		}
 	}
 
+	//checking if the queue contains the patient
 	public boolean contains(String name){
         Integer priorityIndex = nameToIndex.get(name);
 		if (priorityIndex == null){
@@ -100,6 +96,7 @@ public class ERPriorityQueue{
         return true;
 	}
 
+	//getting the priority of the patient
 	public double getPriority(String name){
 		Integer priorityIndex = nameToIndex.get(name);
 		if (priorityIndex == null){
@@ -116,6 +113,7 @@ public class ERPriorityQueue{
 
 	}
 
+	//admitting the first patient in line
 	public String removeMin(){
 		if (patients.size() == 1){
 			return null;
@@ -144,13 +142,7 @@ public class ERPriorityQueue{
 		return patients.get(1).getName();
 	}
 
-	/*
-	 * There are two add methods.  The first assumes a specific priority.
-	 * The second gives a default priority of Double.POSITIVE_INFINITY
-	 *
-	 * If the name is already there, then return false.
-	 */
-
+	//adds patient to the queue with a given priority
 	public boolean  add(String name, double priority){
 		Integer priorityIndex = nameToIndex.get(name);
 		if (priorityIndex != null){
@@ -164,6 +156,7 @@ public class ERPriorityQueue{
 		return true;
 	}
 
+	//adds patient to the queue
 	public boolean  add(String name){
 		Integer priorityIndex = nameToIndex.get(name);
 		if (priorityIndex != null){
@@ -177,6 +170,7 @@ public class ERPriorityQueue{
 		return true;
 	}
 
+	//removes patient from queue
 	public boolean remove(String name){
 		if (nameToIndex.get(name) == null){
 			return false;
@@ -195,12 +189,7 @@ public class ERPriorityQueue{
         return true;
 	}
 
-	/*
-	 *   If new priority is different from the current priority then change the priority
-	 *   (and possibly modify the heap).
-	 *   If the name is not there, return false
-	 */
-
+	//changes priority of the given patient to the new priority
 	public boolean changePriority(String name, double priority){
 		if (nameToIndex.get(name) == null){
 			return false;
@@ -212,6 +201,7 @@ public class ERPriorityQueue{
 		return true;
 	}
 
+	//remove all patients above the threshold
 	public ArrayList<Patient> removeUrgentPatients(double threshold){
 		ArrayList<Patient> urgentPatients = new ArrayList<>();
 
@@ -226,6 +216,7 @@ public class ERPriorityQueue{
         return urgentPatients;
 	}
 
+	//remove all patients below the threshold
 	public ArrayList<Patient> removeNonUrgentPatients(double threshold){
 		ArrayList<Patient> urgentPatients = new ArrayList<>();
 
@@ -280,6 +271,8 @@ public class ERPriorityQueue{
 			Patient otherPatient = (Patient) obj;
 			return this.name.equals(otherPatient.name) && this.priority == otherPatient.priority;
 		}
-
 	}
 }
+
+
+
